@@ -312,6 +312,7 @@ body {
     align-items: baseline;
     gap: 7px;
     padding-bottom: 1.5rem;
+    padding-top: 0.5rem;
     position: relative;
 }
 
