@@ -405,7 +405,7 @@ body {
 }
 /* Specific styles for video element */
 video.project-main-media {
-    background-color: transparent; /* Remove background for videos */
+    background-color: transparent;   
 }
 
 .project-gallery {
