@@ -504,7 +504,15 @@ video.project-main-media {
 .media-caption {
     font-size: 13px;
     color: #616060;
-    margin-top: 0.3rem;
+    margin-top: 0.4rem;
+    opacity: 0.8;
+    text-align: right;
+}
+
+.media-caption2 {
+    font-size: 13px;
+    color: #616060;
+    margin-top: 0rem;
     opacity: 0.8;
     text-align: right;
 }
