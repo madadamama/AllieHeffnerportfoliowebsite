@@ -439,47 +439,88 @@ video.project-main-media {
 /* ===== RESPONSIVE STYLES ===== */
 
 @media (max-width: 768px) {
-    /* Project detail page responsive */
+    /* Sidebar becomes top header */
+    .info-container {
+        position: relative;
+        width: 100%;
+        height: auto;
+        padding: 1.5rem;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .info-about,
+    .info-current,
+    .info-previous,
+    .info-links {
+        display: none;
+    }
+
+    .info-container::after {
+        display: none;
+    }
+
+    .info-name {
+        font-size: 30px;
+        text-align: center;
+    }
+
+    /* Main content */
+    .gallery-container,
     .project-detail-container {
         margin-left: 0;
-        padding: 1.5rem;
+        padding: 1rem;
     }
-    
+
+    .gallery {
+        grid-template-columns: 1fr;
+    }
+
+    /* Project header */
     .project-header {
         flex-wrap: wrap;
-        gap: 10px;
-        align-items: flex-start;
+        gap: 4px;
     }
     
-    .back-arrow {
-        font-size: 28px;
-        order: 1;
-    }
-    
+
     .project-title {
-        font-size: 36px;
+        font-size: 18px;
         order: 2;
         flex: 1;
     }
-    
-    .project-meta {
-        order: 3;
-        width: 100%;
+
+    .back-arrow {
+        order: 1;
+    }
+
+    .project-year {
+        display: none;
+    }
+
+    .project-intro-bar {
         margin-left: 0;
-        margin-top: 10px;
-        align-items: flex-start;
-        flex-direction: row;
-        justify-content: space-between;
+        max-width: 100%;
+        font-size: 12px;
     }
-    
-    .project-description {
-        font-size: 16px;
+
+    /* Images */
+    .cs-row {
+        flex-direction: column;
+        gap: 0.5rem;
     }
-    
-    .project-gallery {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
+
+    .cs-full img,
+    .cs-col img,
+    .cs-col video {
+        width: 100%;
+        height: auto;
     }
+
+    .project-main-media {
+        max-height: none;
+    }
+
 }
 
 .source-link {
@@ -556,11 +597,6 @@ video.project-main-media {
     display: block;
 }
 
-@media (max-width: 768px) {
-    .cs-row {
-        flex-direction: column;
-    }
-}
 
 .project-divider {
     border: none;
