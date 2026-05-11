@@ -54,10 +54,134 @@
     return !!imageShapeSrc[type];
   }
 
+  function removeShapeHandles(el) {
+    if (!el) return;
+    el.querySelectorAll('.pattern-handle').forEach(function (h) {
+      h.remove();
+    });
+  }
+
+  function getRotationDeg(el) {
+    var v = parseFloat(el.dataset.rotation);
+    return Number.isFinite(v) ? v : 0;
+  }
+
+  function setRotationDeg(el, deg) {
+    el.dataset.rotation = String(deg);
+    el.style.transformOrigin = '50% 50%';
+    el.style.transform = 'rotate(' + deg + 'deg)';
+  }
+
+  function addShapeHandles(el) {
+    removeShapeHandles(el);
+    var resize = document.createElement('button');
+    resize.type = 'button';
+    resize.className = 'pattern-handle pattern-handle-resize';
+    resize.setAttribute('aria-label', 'Resize shape');
+    resize.title = 'Drag to resize';
+    var rotate = document.createElement('button');
+    rotate.type = 'button';
+    rotate.className = 'pattern-handle pattern-handle-rotate';
+    rotate.setAttribute('aria-label', 'Rotate shape');
+    rotate.title = 'Drag to rotate';
+    el.appendChild(resize);
+    el.appendChild(rotate);
+
+    resize.addEventListener('pointerdown', function (e) {
+      if (e.button !== 0) return;
+      e.stopPropagation();
+      e.preventDefault();
+      var wrap = el;
+      var pid = e.pointerId;
+      var startW = wrap.offsetWidth;
+      var startH = wrap.offsetHeight;
+      var startX = e.clientX;
+      var startY = e.clientY;
+      try {
+        resize.setPointerCapture(pid);
+      } catch (err) {}
+
+      function move(ev) {
+        var dw = ev.clientX - startX;
+        var dh = ev.clientY - startY;
+        var nw = clamp(startW + dw, 12, canvas.clientWidth);
+        var nh = clamp(startH + dh, 12, canvas.clientHeight);
+        wrap.style.width = nw + 'px';
+        wrap.style.height = nh + 'px';
+      }
+
+      function up() {
+        try {
+          resize.releasePointerCapture(pid);
+        } catch (err2) {}
+        resize.removeEventListener('pointermove', move);
+        resize.removeEventListener('pointerup', up);
+        resize.removeEventListener('pointercancel', up);
+        clampShapesInCanvas();
+      }
+
+      resize.addEventListener('pointermove', move);
+      resize.addEventListener('pointerup', up);
+      resize.addEventListener('pointercancel', up);
+    });
+
+    rotate.addEventListener('pointerdown', function (e) {
+      if (e.button !== 0) return;
+      e.stopPropagation();
+      e.preventDefault();
+      var wrap = el;
+      var pid = e.pointerId;
+      function pivotScreen() {
+        var cr = canvas.getBoundingClientRect();
+        var left = parseFloat(wrap.style.left) || 0;
+        var top = parseFloat(wrap.style.top) || 0;
+        var ew = wrap.offsetWidth;
+        var eh = wrap.offsetHeight;
+        return {
+          cx: cr.left + left + ew / 2,
+          cy: cr.top + top + eh / 2
+        };
+      }
+      var p0 = pivotScreen();
+      var startAngle = Math.atan2(e.clientY - p0.cy, e.clientX - p0.cx);
+      var baseRot = getRotationDeg(wrap);
+      try {
+        rotate.setPointerCapture(pid);
+      } catch (err) {}
+
+      function move(ev) {
+        var p = pivotScreen();
+        var curAngle = Math.atan2(ev.clientY - p.cy, ev.clientX - p.cx);
+        var deltaDeg = ((curAngle - startAngle) * 180) / Math.PI;
+        setRotationDeg(wrap, baseRot + deltaDeg);
+      }
+
+      function up() {
+        try {
+          rotate.releasePointerCapture(pid);
+        } catch (err2) {}
+        rotate.removeEventListener('pointermove', move);
+        rotate.removeEventListener('pointerup', up);
+        rotate.removeEventListener('pointercancel', up);
+        clampShapesInCanvas();
+      }
+
+      rotate.addEventListener('pointermove', move);
+      rotate.addEventListener('pointerup', up);
+      rotate.addEventListener('pointercancel', up);
+    });
+  }
+
   function setSelected(el) {
-    if (selectedEl) selectedEl.classList.remove('is-selected');
+    if (selectedEl) {
+      selectedEl.classList.remove('is-selected');
+      removeShapeHandles(selectedEl);
+    }
     selectedEl = el;
-    if (selectedEl) selectedEl.classList.add('is-selected');
+    if (selectedEl) {
+      selectedEl.classList.add('is-selected');
+      addShapeHandles(selectedEl);
+    }
     var del = document.getElementById('pattern-delete-btn');
     if (del) del.disabled = !selectedEl;
   }
@@ -106,15 +230,23 @@
 
   function clampShapesInCanvas() {
     if (!canvas) return;
+    var cr = canvas.getBoundingClientRect();
     canvas.querySelectorAll('.pattern-on-canvas').forEach(function (el) {
-      var w = el.offsetWidth;
-      var h = el.offsetHeight;
-      var cw = canvas.clientWidth;
-      var ch = canvas.clientHeight;
-      var left = parseFloat(el.style.left) || 0;
-      var top = parseFloat(el.style.top) || 0;
-      el.style.left = clamp(left, 0, Math.max(0, cw - w)) + 'px';
-      el.style.top = clamp(top, 0, Math.max(0, ch - h)) + 'px';
+      var pass;
+      for (pass = 0; pass < 12; pass++) {
+        var br = el.getBoundingClientRect();
+        var dx = 0;
+        var dy = 0;
+        if (br.left < cr.left) dx = cr.left - br.left;
+        else if (br.right > cr.right) dx = cr.right - br.right;
+        if (br.top < cr.top) dy = cr.top - br.top;
+        else if (br.bottom > cr.bottom) dy = cr.bottom - br.bottom;
+        if (!dx && !dy) break;
+        var left = parseFloat(el.style.left) || 0;
+        var top = parseFloat(el.style.top) || 0;
+        el.style.left = left + dx + 'px';
+        el.style.top = top + dy + 'px';
+      }
     });
   }
 
@@ -198,6 +330,14 @@
       var y = parseFloat(el.style.top) || 0;
       var ew = el.offsetWidth;
       var eh = el.offsetHeight;
+      var rot = getRotationDeg(el);
+      var rcx = x + ew / 2;
+      var rcy = y + eh / 2;
+
+      ctx.save();
+      ctx.translate(rcx, rcy);
+      ctx.rotate((rot * Math.PI) / 180);
+      ctx.translate(-rcx, -rcy);
 
       if (isImageShape(type)) {
         var img = imageShapeCache[type];
@@ -223,6 +363,7 @@
         ctx.lineTo(x + ew - pad, ym);
         ctx.stroke();
       }
+      ctx.restore();
     });
 
       done(out);
@@ -354,6 +495,7 @@
     inner.className = shapeInnerClass(type);
     wrap.appendChild(inner);
     if (!isImageShape(type)) applyColorToShape(wrap, placementColor);
+    setRotationDeg(wrap, 0);
     canvas.appendChild(wrap);
     bringToFront(wrap);
     setSelected(wrap);
@@ -362,15 +504,21 @@
   function duplicateShape(el) {
     var type = el.dataset.shape;
     if (!type || !sizes[type]) return;
-    var sz = sizes[type];
+    var w = el.offsetWidth;
+    var h = el.offsetHeight;
     var clone = el.cloneNode(true);
     clone.classList.remove('is-selected');
+    removeShapeHandles(clone);
+    clone.style.width = w + 'px';
+    clone.style.height = h + 'px';
+    setRotationDeg(clone, getRotationDeg(el));
     var left = parseFloat(el.style.left) || 0;
     var top = parseFloat(el.style.top) || 0;
-    clone.style.left = clamp(left + 14, 0, canvas.clientWidth - sz.w) + 'px';
-    clone.style.top = clamp(top + 14, 0, canvas.clientHeight - sz.h) + 'px';
+    clone.style.left = left + 14 + 'px';
+    clone.style.top = top + 14 + 'px';
     clone.style.zIndex = '';
     canvas.appendChild(clone);
+    clampShapesInCanvas();
     bringToFront(clone);
     setSelected(clone);
   }
@@ -434,6 +582,7 @@
         setSelected(null);
         return;
       }
+      if (e.target.closest('.pattern-handle')) return;
       if (e.target.closest('.pattern-canvas-resize')) return;
       var el = e.target.closest('.pattern-on-canvas');
       if (!el || el.parentNode !== canvas) return;

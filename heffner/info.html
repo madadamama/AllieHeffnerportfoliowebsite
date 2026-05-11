@@ -16,7 +16,6 @@
       <div class="info-popup-card" role="dialog" aria-labelledby="info-popup-title">
         <img class="info-popup-logo hfa-logo" src="hfalogo.png" width="400" height="400" alt="Heffner Family Archive">
         <ul class="info-popup-list">
-          <li><button type="button" class="info-menu-trigger" data-info-panel="process">Process</button></li>
           <li><button type="button" class="info-menu-trigger" data-info-panel="backstory">Backstory</button></li>
           <li><button type="button" class="info-menu-trigger" data-info-panel="pattern">Make your own pattern</button></li>
           <li><button type="button" class="info-menu-trigger" data-info-panel="research">Pattern Playground</button></li>
@@ -25,22 +24,20 @@
     </div>
   </main>
 
-  <article id="info-panel-process" class="info-floating-pop" role="dialog" aria-labelledby="title-process" hidden aria-hidden="true">
-    <h1 id="title-process">Process</h1>
-    <p>Maybe this will be a video instead, still debating on how I should present my process of making</p>
-    <img src="">
-    <button type="button" class="info-floating-close">Close</button>
-  </article>
-
-  <article id="info-panel-backstory" class="info-floating-pop" role="dialog" aria-labelledby="title-backstory" hidden aria-hidden="true">
+  <article id="info-panel-backstory" class="info-floating-pop info-floating-pop-backstory" role="dialog" aria-labelledby="title-backstory" hidden aria-hidden="true">
     <h1 id="title-backstory">Backstory</h1>
-    <p>Add family narrative and context for the archive here.</p>
+    <p>What do you think of when you hear the word archive? An archive begins with an object, then builds off of curiosity. According to Wikipedia, "An archive is an accumulation of historical records or materials, in any medium, or the physical facility in which they are located."</p>
+    <figure class="info-backstory-photo">
+      <img src="familyphoto.JPG" alt="Family photograph">
+    </figure>
+    <p>I became an archivist when my Dad passed away. I had begun to collect and dig through mounds of files and photos when there were no more physical things I could hold onto. I have always been drawn to family photos. Every time I would visit my family in Hong Kong, I would make sure to dedicate at least two days within my two-week stay to scanning and digitizing them. This resulted in getting in trouble with my Mom because she had a certain way of organizing them and I had messed up her "system."</p><br>
+    <p>The reward in messing up her "system" was a collection of messages from my family saying "Treasures! Thank you, Allie. Those were good times." or "Allie always manages to find our old photos." And this is all true. I continue to find joy in searching for memory. There are people I have no memories with in these pictures, some I don't even know, and some I wish I had more time with.</p>
     <button type="button" class="info-floating-close">Close</button>
   </article>
 
   <article id="info-panel-pattern" class="info-floating-pop info-floating-pop-wide info-floating-pop-pattern" role="dialog" aria-labelledby="title-pattern" hidden aria-hidden="true">
     <h1 id="title-pattern" class="info-floating-heading-long">Make your own pattern</h1>
-    <p class="pattern-maker-hint">Drag pattern assets from the palette onto the canvas. Tap an asset to select it, then Delete. Drag to move; double-click to duplicate. Drag the corner grip to resize the canvas.</p>
+    <p class="pattern-maker-hint">Drag pattern assets from the palette onto the canvas. Select a shape to show handles: drag the bottom-right dot to resize, the top dot to rotate. Drag to move; double-click to duplicate. Drag the canvas corner grip to resize the canvas.</p>
     <div class="pattern-maker">
       <div class="pattern-palette" role="toolbar" aria-label="Pattern assets">
         <div class="pattern-tool" data-shape="rect-vertical" role="button" tabindex="0" title="Vertical rectangle">
