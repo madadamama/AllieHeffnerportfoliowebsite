@@ -3,13 +3,34 @@
   var shell = null;
   var selectedEl = null;
   var placementColor = '#ffeb3b';
+  var canvasBgColor = '#f0f0f0';
+  var COMMUNITY_STORAGE_KEY = 'hfa-community-patterns-v1';
+  var COMMUNITY_MAX_ITEMS = 36;
 
   var sizes = {
-    circle: { w: 48, h: 48 },
-    rect: { w: 28, h: 56 },
-    square: { w: 44, h: 44 },
-    line: { w: 56, h: 14 }
+    'rect-vertical': { w: 28, h: 56 },
+    'rect-horizontal': { w: 56, h: 28 },
+    'dot-1': { w: 36, h: 36 },
+    line_1: { w: 112, h: 28 }
   };
+
+  var imageShapeSrc = {
+    'rect-vertical': 'rect-vertical.png',
+    'rect-horizontal': 'rect-horizontal.png',
+    'dot-1': 'dot-1.png',
+    line_1: 'line_1.png'
+  };
+  var imageShapeCache = {};
+
+  function getSupabaseConfig() {
+    return window.HFA_SUPABASE || {};
+  }
+
+  function getSupabaseClient() {
+    var cfg = getSupabaseConfig();
+    if (!window.supabase || !cfg.url || !cfg.anonKey) return null;
+    return window.supabase.createClient(cfg.url, cfg.anonKey);
+  }
 
   function clamp(n, min, max) {
     return Math.min(Math.max(n, min), max);
@@ -27,6 +48,10 @@
 
   function shapeInnerClass(type) {
     return 'pattern-on-canvas-inner pattern-shape-' + type;
+  }
+
+  function isImageShape(type) {
+    return !!imageShapeSrc[type];
   }
 
   function setSelected(el) {
@@ -58,7 +83,25 @@
     var custom = document.getElementById('pattern-color-custom');
     if (custom) custom.value = placementColor;
     syncSwatches(placementColor);
-    if (selectedEl) applyColorToShape(selectedEl, placementColor);
+    if (selectedEl && !isImageShape(selectedEl.dataset.shape)) {
+      applyColorToShape(selectedEl, placementColor);
+    }
+  }
+
+  function syncBackgroundSwatches(hex) {
+    var target = normalizeHex(hex);
+    document.querySelectorAll('.pattern-bg-swatch').forEach(function (b) {
+      var match = normalizeHex(b.getAttribute('data-bg')) === target;
+      b.classList.toggle('is-active', match);
+    });
+  }
+
+  function setCanvasBgColor(hex) {
+    canvasBgColor = normalizeHex(hex);
+    if (canvas) canvas.style.backgroundColor = canvasBgColor;
+    var custom = document.getElementById('pattern-bg-custom');
+    if (custom) custom.value = canvasBgColor;
+    syncBackgroundSwatches(canvasBgColor);
   }
 
   function clampShapesInCanvas() {
@@ -91,7 +134,33 @@
     );
   }
 
-  function savePattern() {
+  function loadImageShape(type) {
+    if (!isImageShape(type)) return Promise.resolve(null);
+    if (imageShapeCache[type]) return Promise.resolve(imageShapeCache[type]);
+    return new Promise(function (resolve) {
+      var img = new Image();
+      img.onload = function () {
+        imageShapeCache[type] = img;
+        resolve(img);
+      };
+      img.onerror = function () {
+        resolve(null);
+      };
+      img.src = imageShapeSrc[type];
+    });
+  }
+
+  function drawImageContain(ctx, img, x, y, w, h) {
+    if (!img || !img.width || !img.height) return;
+    var scale = Math.min(w / img.width, h / img.height);
+    var dw = img.width * scale;
+    var dh = img.height * scale;
+    var dx = x + (w - dw) / 2;
+    var dy = y + (h - dh) / 2;
+    ctx.drawImage(img, dx, dy, dw, dh);
+  }
+
+  function drawPatternOnExportCanvas(done) {
     if (!canvas) return;
     var dpr = window.devicePixelRatio || 1;
     var w = canvas.clientWidth;
@@ -101,12 +170,28 @@
     out.height = Math.round(h * dpr);
     var ctx = out.getContext('2d');
     ctx.scale(dpr, dpr);
-    ctx.fillStyle = '#f0f0f0';
+    ctx.fillStyle = canvasBgColor;
     ctx.fillRect(0, 0, w, h);
 
     ctx.lineWidth = 2;
 
-    canvas.querySelectorAll('.pattern-on-canvas').forEach(function (el) {
+    var shapes = Array.prototype.slice.call(
+      canvas.querySelectorAll('.pattern-on-canvas')
+    );
+    var imageTypesToLoad = [];
+    shapes.forEach(function (el) {
+      var t = el.dataset.shape;
+      if (isImageShape(t) && imageTypesToLoad.indexOf(t) === -1) {
+        imageTypesToLoad.push(t);
+      }
+    });
+
+    Promise.all(
+      imageTypesToLoad.map(function (t) {
+        return loadImageShape(t);
+      })
+    ).then(function () {
+      shapes.forEach(function (el) {
       var type = el.dataset.shape;
       var fill = normalizeHex(el.dataset.fill) || '#ffeb3b';
       var x = parseFloat(el.style.left) || 0;
@@ -114,7 +199,10 @@
       var ew = el.offsetWidth;
       var eh = el.offsetHeight;
 
-      if (type === 'circle') {
+      if (isImageShape(type)) {
+        var img = imageShapeCache[type];
+        if (img) drawImageContain(ctx, img, x, y, ew, eh);
+      } else if (type === 'circle') {
         var cx = x + ew / 2;
         var cy = y + eh / 2;
         var r = Math.min(ew, eh) / 2;
@@ -137,19 +225,98 @@
       }
     });
 
-    out.toBlob(
-      function (blob) {
-        if (!blob) return;
-        var url = URL.createObjectURL(blob);
-        var a = document.createElement('a');
-        a.href = url;
-        a.download = 'pattern-' + stampFileName() + '.png';
-        a.click();
-        URL.revokeObjectURL(url);
-      },
-      'image/png',
-      1
-    );
+      done(out);
+    });
+  }
+
+  function savePattern() {
+    drawPatternOnExportCanvas(function (out) {
+      out.toBlob(
+        function (blob) {
+          if (!blob) return;
+          var url = URL.createObjectURL(blob);
+          var a = document.createElement('a');
+          a.href = url;
+          a.download = 'pattern-' + stampFileName() + '.png';
+          a.click();
+          URL.revokeObjectURL(url);
+        },
+        'image/png',
+        1
+      );
+    });
+  }
+
+  function uploadPatternToPlayground() {
+    drawPatternOnExportCanvas(function (out) {
+      out.toBlob(
+        function (blob) {
+          if (!blob) return;
+          var author = window.prompt('Your name (optional):', '') || '';
+          var message = window.prompt('Leave a short message (optional):', '') || '';
+          var client = getSupabaseClient();
+          var cfg = getSupabaseConfig();
+          if (client) {
+            var bucket = cfg.bucket || 'patterns';
+            var table = cfg.table || 'community_patterns';
+            var path =
+              'uploads/' +
+              Date.now() +
+              '-' +
+              Math.random().toString(36).slice(2) +
+              '.png';
+            client.storage
+              .from(bucket)
+              .upload(path, blob, { contentType: 'image/png', upsert: false })
+              .then(function (uploadRes) {
+                if (uploadRes.error) throw uploadRes.error;
+                var publicUrl = client.storage.from(bucket).getPublicUrl(path).data
+                  .publicUrl;
+                return client.from(table).insert({
+                  image_url: publicUrl,
+                  author_name: author || null,
+                  note: message || null
+                }).then(function (insertRes) {
+                  if (!insertRes.error) return insertRes;
+                  return client.from(table).insert({ image_url: publicUrl });
+                }).catch(function () {
+                  return client.from(table).insert({ image_url: publicUrl });
+                });
+              })
+              .then(function (insertRes) {
+                if (insertRes.error) throw insertRes.error;
+                window.dispatchEvent(new Event('hfa:community-patterns-updated'));
+              })
+              .catch(function () {
+                alert('Upload failed. Check Supabase anon key and table policies.');
+              });
+            return;
+          }
+          var reader = new FileReader();
+          reader.onload = function () {
+            var src = typeof reader.result === 'string' ? reader.result : '';
+            if (!src) return;
+            try {
+              var raw = localStorage.getItem(COMMUNITY_STORAGE_KEY);
+              var items = raw ? JSON.parse(raw) : [];
+              if (!Array.isArray(items)) items = [];
+              items.unshift({
+                src: src,
+                createdAt: Date.now(),
+                author: author,
+                message: message
+              });
+              items = items.slice(0, COMMUNITY_MAX_ITEMS);
+              localStorage.setItem(COMMUNITY_STORAGE_KEY, JSON.stringify(items));
+              window.dispatchEvent(new Event('hfa:community-patterns-updated'));
+            } catch (err) {}
+          };
+          reader.readAsDataURL(blob);
+        },
+        'image/png',
+        1
+      );
+    });
   }
 
   function createGhost(type) {
@@ -186,7 +353,7 @@
     var inner = document.createElement('div');
     inner.className = shapeInnerClass(type);
     wrap.appendChild(inner);
-    applyColorToShape(wrap, placementColor);
+    if (!isImageShape(type)) applyColorToShape(wrap, placementColor);
     canvas.appendChild(wrap);
     bringToFront(wrap);
     setSelected(wrap);
@@ -381,6 +548,20 @@
     }
   }
 
+  function bindBackgroundColorBar() {
+    document.querySelectorAll('.pattern-bg-swatch').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        setCanvasBgColor(btn.getAttribute('data-bg'));
+      });
+    });
+    var custom = document.getElementById('pattern-bg-custom');
+    if (custom) {
+      custom.addEventListener('input', function () {
+        setCanvasBgColor(custom.value);
+      });
+    }
+  }
+
   function bindDelete() {
     var del = document.getElementById('pattern-delete-btn');
     if (!del) return;
@@ -398,7 +579,9 @@
     shell = document.getElementById('pattern-canvas-shell');
     if (!canvas || !shell) return;
     setPlacementColor(placementColor);
+    setCanvasBgColor(canvasBgColor);
     bindColorBar();
+    bindBackgroundColorBar();
     bindDelete();
     bindCanvasResize();
     bindCanvasInteractions();
@@ -406,6 +589,10 @@
     var saveBtn = document.getElementById('pattern-save-btn');
     if (saveBtn) {
       saveBtn.addEventListener('click', savePattern);
+    }
+    var uploadBtn = document.getElementById('pattern-upload-btn');
+    if (uploadBtn) {
+      uploadBtn.addEventListener('click', uploadPatternToPlayground);
     }
   }
 

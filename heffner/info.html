@@ -19,7 +19,7 @@
           <li><button type="button" class="info-menu-trigger" data-info-panel="process">Process</button></li>
           <li><button type="button" class="info-menu-trigger" data-info-panel="backstory">Backstory</button></li>
           <li><button type="button" class="info-menu-trigger" data-info-panel="pattern">Make your own pattern</button></li>
-          <li><button type="button" class="info-menu-trigger" data-info-panel="research">Research</button></li>
+          <li><button type="button" class="info-menu-trigger" data-info-panel="research">Pattern Playground</button></li>
         </ul>
       </div>
     </div>
@@ -40,33 +40,33 @@
 
   <article id="info-panel-pattern" class="info-floating-pop info-floating-pop-wide info-floating-pop-pattern" role="dialog" aria-labelledby="title-pattern" hidden aria-hidden="true">
     <h1 id="title-pattern" class="info-floating-heading-long">Make your own pattern</h1>
-    <p class="pattern-maker-hint">Drag shapes from the palette onto the canvas. Tap a shape to select it, then pick a color or Delete. Drag to move; double-click to duplicate. Drag the corner grip to resize the canvas.</p>
+    <p class="pattern-maker-hint">Drag pattern assets from the palette onto the canvas. Tap an asset to select it, then Delete. Drag to move; double-click to duplicate. Drag the corner grip to resize the canvas.</p>
     <div class="pattern-maker">
-      <div class="pattern-palette" role="toolbar" aria-label="Pattern shapes">
-        <div class="pattern-tool" data-shape="circle" role="button" tabindex="0" title="Circle">
-          <div class="pattern-tool-inner pattern-shape-circle"></div>
+      <div class="pattern-palette" role="toolbar" aria-label="Pattern assets">
+        <div class="pattern-tool" data-shape="rect-vertical" role="button" tabindex="0" title="Vertical rectangle">
+          <div class="pattern-tool-inner pattern-shape-rect-vertical"></div>
         </div>
-        <div class="pattern-tool" data-shape="rect" role="button" tabindex="0" title="Rectangle">
-          <div class="pattern-tool-inner pattern-shape-rect"></div>
+        <div class="pattern-tool" data-shape="rect-horizontal" role="button" tabindex="0" title="Horizontal rectangle">
+          <div class="pattern-tool-inner pattern-shape-rect-horizontal"></div>
         </div>
-        <div class="pattern-tool" data-shape="line" role="button" tabindex="0" title="Line">
-          <div class="pattern-tool-inner pattern-shape-line"></div>
+        <div class="pattern-tool" data-shape="dot-1" role="button" tabindex="0" title="Dot">
+          <div class="pattern-tool-inner pattern-shape-dot-1"></div>
         </div>
-        <div class="pattern-tool" data-shape="square" role="button" tabindex="0" title="Square">
-          <div class="pattern-tool-inner pattern-shape-square"></div>
+        <div class="pattern-tool" data-shape="line_1" role="button" tabindex="0" title="Strip line">
+          <div class="pattern-tool-inner pattern-shape-line_1"></div>
         </div>
       </div>
-      <div class="pattern-color-bar" role="group" aria-label="Shape color">
-        <span class="pattern-color-label">Color</span>
-        <button type="button" class="pattern-color-swatch is-active" data-fill="#ffeb3b" style="background-color:#ffeb3b" title="Yellow" aria-label="Yellow"></button>
-        <button type="button" class="pattern-color-swatch" data-fill="#ffffff" style="background-color:#ffffff" title="White" aria-label="White"></button>
-        <button type="button" class="pattern-color-swatch" data-fill="#ff5252" style="background-color:#ff5252" title="Red" aria-label="Red"></button>
-        <button type="button" class="pattern-color-swatch" data-fill="#448aff" style="background-color:#448aff" title="Blue" aria-label="Blue"></button>
-        <button type="button" class="pattern-color-swatch" data-fill="#69f0ae" style="background-color:#69f0ae" title="Mint" aria-label="Mint"></button>
-        <button type="button" class="pattern-color-swatch" data-fill="#000000" style="background-color:#000000" title="Black" aria-label="Black"></button>
+      <div class="pattern-color-bar" role="group" aria-label="Canvas color">
+        <span class="pattern-color-label">Background</span>
+        <button type="button" class="pattern-bg-swatch is-active" data-bg="#f0f0f0" style="background-color:#f0f0f0" title="Light gray" aria-label="Light gray"></button>
+        <button type="button" class="pattern-bg-swatch" data-bg="#ffffff" style="background-color:#ffffff" title="White" aria-label="White"></button>
+        <button type="button" class="pattern-bg-swatch" data-bg="#ffeb3b" style="background-color:#ffeb3b" title="Yellow" aria-label="Yellow"></button>
+        <button type="button" class="pattern-bg-swatch" data-bg="#ffd6e7" style="background-color:#ffd6e7" title="Pink" aria-label="Pink"></button>
+        <button type="button" class="pattern-bg-swatch" data-bg="#d8f6ff" style="background-color:#d8f6ff" title="Sky" aria-label="Sky"></button>
+        <button type="button" class="pattern-bg-swatch" data-bg="#000000" style="background-color:#000000" title="Black" aria-label="Black"></button>
         <label class="pattern-color-custom">
-          <span class="pattern-visually-hidden">Custom color</span>
-          <input type="color" id="pattern-color-custom" value="#ffeb3b" title="Custom color" />
+          <span class="pattern-visually-hidden">Custom background color</span>
+          <input type="color" id="pattern-bg-custom" value="#f0f0f0" title="Custom background color" />
         </label>
       </div>
       <div id="pattern-canvas-shell" class="pattern-canvas-shell">
@@ -75,19 +75,38 @@
       </div>
       <div class="pattern-maker-actions">
         <button type="button" class="pattern-delete" id="pattern-delete-btn">Delete</button>
+        <button type="button" class="pattern-upload" id="pattern-upload-btn">Upload to playground</button>
         <button type="button" class="pattern-save" id="pattern-save-btn">Save pattern</button>
       </div>
     </div>
     <button type="button" class="info-floating-close">Close</button>
   </article>
 
-  <article id="info-panel-research" class="info-floating-pop" role="dialog" aria-labelledby="title-research" hidden aria-hidden="true">
-    <h1 id="title-research">Research</h1>
-    <p>Add sources, citations, and notes from your research here.</p>
+  <article id="info-panel-research" class="info-floating-pop info-floating-pop-playground" role="dialog" aria-labelledby="title-research" hidden aria-hidden="true">
+    <h1 id="title-research">Pattern Playground</h1>
+    <p>Upload pattern images to the community board and browse what everyone has added.</p>
+    <div class="community-board" id="community-board">
+      <div class="community-board-controls">
+        <label class="community-upload-btn" for="community-pattern-upload">Upload pattern</label>
+        <input id="community-pattern-upload" class="community-upload-input" type="file" accept="image/png,image/jpeg,image/webp" multiple />
+      </div>
+      <div class="community-board-grid" id="community-board-grid" aria-live="polite"></div>
+      <p class="community-board-note">Saved locally in this browser.</p>
+    </div>
     <button type="button" class="info-floating-close">Close</button>
   </article>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    window.HFA_SUPABASE = {
+      url: 'https://qgasnsuzyyvtesplopml.supabase.co',
+      anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFnYXNuc3V6eXl2dGVzcGxvcG1sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg0NzI3MTcsImV4cCI6MjA5NDA0ODcxN30.LkhAXsW2iFqC3hCQB2AuIDJaNGEbOS1Xhvf3j-h-H40',
+      bucket: 'patterns',
+      table: 'community_patterns'
+    };
+  </script>
   <script src="info-float.js"></script>
   <script src="pattern-maker.js"></script>
+  <script src="pattern-playground.js"></script>
 </body>
 </html>
