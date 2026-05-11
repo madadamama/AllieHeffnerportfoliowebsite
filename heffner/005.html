@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Heffner Family Archive</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="page">
+    <header class="topbar">
+      <a href="index.html">Heffner Family Archive</a>
+      <a href="info.html" class="topbar-info-logo" aria-label="Info"><img class="hfa-logo hfa-logo--topbar" src="hfalogo.png" width="1739" height="1276" alt=""></a>
+    </header>
+    <div class="title2"> 
+        <h1> DAD</h1>
+    </div>
+    <section class="archive-grid">
+      <div class="column">
+        <figure class="piece"><div class="swatch s1 swatch-pop"><img src="dadstripes.png" alt=""><a class="swatch-hover-more" href="dadstripe.html"><span class="swatch-hover-more-inner">DAD'S STRIPES <br> <span class="number">2026.005.01</span></a></div></figure>
+        <figure class="piece"><div class="swatch s1 swatch-pop"><img src="dadtie.png" alt=""><a class="swatch-hover-more" href="tiefourways.html"><span class="swatch-hover-more-inner">TIE FOUR WAYS <br><span class="number">2026.005.04</span></a></div></figure>
+        <figure class="piece"><div class="swatch s3 swatch-pop"><img src="lastbirthday.png" alt=""><a class="swatch-hover-more" href="pop.html"><span class="swatch-hover-more-inner">TIE FOUR WAYS <br><span class="number">2026.005.07</span></a></div></figure>
+        <figure class="piece"><div class="swatch s4 swatch-pop"><img src="manyfunkyties.png" alt=""><a class="swatch-hover-more" href="pop.html"><span class="swatch-hover-more-inner">BALLOON PANTS<br><span class="number">2026.005.01</span></a></div></figure>
+      </div>
+
+      <div class="column">
+        <figure class="piece"><div class="swatch s5 swatch-pop"><img src="stripes.png" alt=""><a class="swatch-hover-more" href="nana.html"><span class="swatch-hover-more-inner">FAMILY DINNER<br> <span class="number">2026.005.02</span></a></div></figure>
+        <figure class="piece"><div class="swatch s6 swatch-pop"><img src="apron.png" alt=""><a class="swatch-hover-more" href="pop.html"><span class="swatch-hover-more-inner">CLERICAL COLLAR <br> <span class="number">2026.005.05</span></a></div></figure>
+        <figure class="piece"><div class="swatch s7 swatch-pop"><img src="dadplaid.png" alt=""><a class="swatch-hover-more" href="pop.html"><span class="swatch-hover-more-inner">UNCLE MONKEY'S TIE<br><span class="number">2026.003.08</span></a></div></figure>
+        <figure class="piece"><div class="swatch s8 swatch-pop"><img src="tie4ways.png" alt=""><a class="swatch-hover-more" href="pop.html"><span class="swatch-hover-more-inner">A VERY BUSY STREET<br><span class="number">2026.003.00</span></a></div></figure>
+      </div>
+
+      <div class="column">
+        <figure class="piece"><div class="swatch s5 swatch-pop"><img src="dots.png" alt=""><a class="swatch-hover-more" href="polkadottie.html"><span class="swatch-hover-more-inner">DAD'S TIE<br> <span class="number">2026.005.03</span></a></div></figure>
+        <figure class="piece"><div class="swatch s10 swatch-pop"><img src="dadshirt.png" alt=""><a class="swatch-hover-more" href="pop.html"><span class="swatch-hover-more-inner">AUNTIE MARIA'S VEST <span class="number"><br>2026.005.06</span></a></div></figure>
+        <figure class="piece"><div class="swatch s11 swatch-pop"><img src="dadshirt2.png" alt=""><a class="swatch-hover-more" href="pop.html"><span class="swatch-hover-more-inner">FAVORITE SUIT<br><span class="number">2026.005.09</span></a></div></figure>
+        <figure class="piece"><div class="swatch s12 swatch-pop"><img src="dadzipper.png" alt=""><a class="swatch-hover-more" href="pop.html"><span class="swatch-hover-more-inner">click for more</span></a></div></figure>
+      </div>
+    </section>
+  </main>
+  <script>
+    const hoverTags = document.querySelectorAll(".swatch-hover-more-inner");
+    hoverTags.forEach((tag) => {
+      const angle = (Math.random() * 8 - 4).toFixed(2);
+      const offsetX = (Math.random() * 12 - 6).toFixed(1);
+      const offsetY = (Math.random() * 8 - 4).toFixed(1);
+      tag.style.transform = `translate(${offsetX}px, ${offsetY}px) rotate(${angle}deg)`;
+    });
+  </script>
+</body>
+</html>

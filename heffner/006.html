@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Heffner Family Archive</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="page">
+    <header class="topbar">
+      <a href="index.html">Heffner Family Archive</a>
+      <a href="info.html" class="topbar-info-logo" aria-label="Info"><img class="hfa-logo hfa-logo--topbar" src="hfalogo.png" width="1739" height="1276" alt=""></a>
+    </header>
+    <div class="title2"> 
+        <h1> 006 AUNTIE MARIA</h1>
+    </div>
+    <section class="archive-grid">
+      <div class="column">
+        <figure class="piece"><div class="swatch s1 swatch-pop"><img src="auntiemaria.png" alt=""><a class="swatch-hover-more" href="auntiemariasvest.html"><span class="swatch-hover-more-inner">AUNTIE MARIA'S VEST <br> <span class="number">2026.006.01</span></a></div></figure>
+      </div>
+
+      <div class="column">
+        <figure class="piece"><div class="swatch s5 swatch-pop"><img src="stripes.png" alt=""><a class="swatch-hover-more" href="nana.html"><span class="swatch-hover-more-inner">FAMILY DINNER<br> <span class="number">2026.003.02</span></a></div></figure>
+      </div>
+
+      <div class="column">
+        <figure class="piece"><div class="swatch s5 swatch-pop"><img src="dots.png" alt=""><a class="swatch-hover-more" href="polkadottie.html"><span class="swatch-hover-more-inner">DAD'S TIE<br> <span class="number">2026.003.03</span></a></div></figure>
+      </div>
+    </section>
+  </main>
+  <script>
+    const hoverTags = document.querySelectorAll(".swatch-hover-more-inner");
+    hoverTags.forEach((tag) => {
+      const angle = (Math.random() * 8 - 4).toFixed(2);
+      const offsetX = (Math.random() * 12 - 6).toFixed(1);
+      const offsetY = (Math.random() * 8 - 4).toFixed(1);
+      tag.style.transform = `translate(${offsetX}px, ${offsetY}px) rotate(${angle}deg)`;
+    });
+  </script>
+</body>
+</html>
