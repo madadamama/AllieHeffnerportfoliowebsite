@@ -1,4 +1,28 @@
 document.addEventListener('DOMContentLoaded', function() {
+    const audioDock = document.getElementById('audio-dock');
+    const siteAudio = document.getElementById('site-audio');
+    const audioTickerBtn = document.getElementById('audio-ticker-btn');
+    if (audioDock && siteAudio && audioTickerBtn) {
+        const labelPlay = 'Play NEW MUSIC VOICEMAIL';
+        const labelPause = 'Pause NEW MUSIC VOICEMAIL';
+        function syncAudioUi() {
+            const on = !siteAudio.paused;
+            audioDock.classList.toggle('is-playing', on);
+            audioTickerBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
+            audioTickerBtn.setAttribute('aria-label', on ? labelPause : labelPlay);
+        }
+        audioTickerBtn.addEventListener('click', function() {
+            if (siteAudio.paused) {
+                siteAudio.play().catch(function() { syncAudioUi(); });
+            } else {
+                siteAudio.pause();
+            }
+        });
+        siteAudio.addEventListener('play', syncAudioUi);
+        siteAudio.addEventListener('pause', syncAudioUi);
+        syncAudioUi();
+    }
+
     // Your existing thumbnail code stays exactly the same
     document.querySelectorAll('.project-thumb').forEach(thumb => {
         const mainImage = thumb.getAttribute('data-main');

@@ -37,7 +37,7 @@
 
   <article id="info-panel-pattern" class="info-floating-pop info-floating-pop-wide info-floating-pop-pattern" role="dialog" aria-labelledby="title-pattern" hidden aria-hidden="true">
     <h1 id="title-pattern" class="info-floating-heading-long">Make your own pattern</h1>
-    <p class="pattern-maker-hint">Drag pattern assets from the palette onto the canvas. Select a shape to show handles: drag the bottom-right dot to resize, the top dot to rotate. Drag to move; double-click to duplicate. Drag the canvas corner grip to resize the canvas.</p>
+    <p class="pattern-maker-hint">Drag pattern assets from the palette onto the canvas. Select a shape to show handles: drag the bottom-right dot to resize, the top dot to rotate. Drag to move; double-click to duplicate. Drag the canvas corner grip to resize the canvas. Use <strong>Shape color</strong> (swatches or custom) for new shapes or to recolor the selected shape; PNG texture is kept.</p>
     <div class="pattern-maker">
       <div class="pattern-palette" role="toolbar" aria-label="Pattern assets">
         <div class="pattern-tool" data-shape="rect-vertical" role="button" tabindex="0" title="Vertical rectangle">
@@ -53,7 +53,22 @@
           <div class="pattern-tool-inner pattern-shape-line_1"></div>
         </div>
       </div>
-      <div class="pattern-color-bar" role="group" aria-label="Canvas color">
+      <div class="pattern-color-bar" role="group" aria-label="Shape color">
+        <span class="pattern-color-label">Shape color</span>
+        <button type="button" class="pattern-color-swatch is-active" data-fill="#ffeb3b" style="background-color:#ffeb3b" title="Yellow" aria-label="Yellow"></button>
+        <button type="button" class="pattern-color-swatch" data-fill="#000000" style="background-color:#000000" title="Black" aria-label="Black"></button>
+        <button type="button" class="pattern-color-swatch" data-fill="#ffffff" style="background-color:#ffffff" title="White" aria-label="White"></button>
+        <button type="button" class="pattern-color-swatch" data-fill="#e53935" style="background-color:#e53935" title="Red" aria-label="Red"></button>
+        <button type="button" class="pattern-color-swatch" data-fill="#43a047" style="background-color:#43a047" title="Green" aria-label="Green"></button>
+        <button type="button" class="pattern-color-swatch" data-fill="#1e88e5" style="background-color:#1e88e5" title="Blue" aria-label="Blue"></button>
+        <button type="button" class="pattern-color-swatch" data-fill="#8e24aa" style="background-color:#8e24aa" title="Purple" aria-label="Purple"></button>
+        <button type="button" class="pattern-color-swatch" data-fill="#ff6f00" style="background-color:#ff6f00" title="Orange" aria-label="Orange"></button>
+        <label class="pattern-color-custom">
+          <span class="pattern-visually-hidden">Custom shape color</span>
+          <input type="color" id="pattern-color-custom" value="#ffeb3b" title="Custom shape color" />
+        </label>
+      </div>
+      <div class="pattern-color-bar" role="group" aria-label="Background color">
         <span class="pattern-color-label">Background</span>
         <button type="button" class="pattern-bg-swatch is-active" data-bg="#f0f0f0" style="background-color:#f0f0f0" title="Light gray" aria-label="Light gray"></button>
         <button type="button" class="pattern-bg-swatch" data-bg="#ffffff" style="background-color:#ffffff" title="White" aria-label="White"></button>

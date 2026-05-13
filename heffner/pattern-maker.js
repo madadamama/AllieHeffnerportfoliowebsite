@@ -33,6 +33,8 @@
   }
 
   function clamp(n, min, max) {
+    if (!Number.isFinite(max) || !Number.isFinite(min)) return n;
+    if (max < min) return min;
     return Math.min(Math.max(n, min), max);
   }
 
@@ -181,6 +183,10 @@
     if (selectedEl) {
       selectedEl.classList.add('is-selected');
       addShapeHandles(selectedEl);
+      var fill = selectedEl.dataset.fill;
+      if (fill) {
+        setPlacementColor(fill);
+      }
     }
     var del = document.getElementById('pattern-delete-btn');
     if (del) del.disabled = !selectedEl;
@@ -190,6 +196,10 @@
     var h = normalizeHex(hex);
     el.dataset.fill = h;
     el.style.setProperty('--shape-color', h);
+    var inner = el.querySelector('.pattern-on-canvas-inner');
+    if (inner) {
+      inner.style.setProperty('--shape-color', h);
+    }
   }
 
   function syncSwatches(hex) {
@@ -207,7 +217,7 @@
     var custom = document.getElementById('pattern-color-custom');
     if (custom) custom.value = placementColor;
     syncSwatches(placementColor);
-    if (selectedEl && !isImageShape(selectedEl.dataset.shape)) {
+    if (selectedEl) {
       applyColorToShape(selectedEl, placementColor);
     }
   }
@@ -292,6 +302,35 @@
     ctx.drawImage(img, dx, dy, dw, dh);
   }
 
+  function drawTexturedImageShape(ctx, type, x, y, ew, eh, fill, img) {
+    ctx.save();
+    if (type === 'dot-1') {
+      var cxd = x + ew / 2;
+      var cyd = y + eh / 2;
+      var rd = Math.min(ew, eh) / 2;
+      ctx.beginPath();
+      ctx.arc(cxd, cyd, rd, 0, Math.PI * 2);
+      ctx.clip();
+    } else if (type === 'rect-vertical' || type === 'rect-horizontal') {
+      ctx.beginPath();
+      ctx.rect(x, y, ew, eh);
+      ctx.clip();
+    } else if (type === 'line_1') {
+      ctx.beginPath();
+      ctx.rect(x, y, ew, eh);
+      ctx.clip();
+    }
+    ctx.fillStyle = fill;
+    ctx.fillRect(x, y, ew, eh);
+    if (img && img.width) {
+      var prev = ctx.globalCompositeOperation;
+      ctx.globalCompositeOperation = 'luminosity';
+      drawImageContain(ctx, img, x, y, ew, eh);
+      ctx.globalCompositeOperation = prev;
+    }
+    ctx.restore();
+  }
+
   function drawPatternOnExportCanvas(done) {
     if (!canvas) return;
     var dpr = window.devicePixelRatio || 1;
@@ -341,7 +380,7 @@
 
       if (isImageShape(type)) {
         var img = imageShapeCache[type];
-        if (img) drawImageContain(ctx, img, x, y, ew, eh);
+        drawTexturedImageShape(ctx, type, x, y, ew, eh, fill, img);
       } else if (type === 'circle') {
         var cx = x + ew / 2;
         var cy = y + eh / 2;
@@ -479,11 +518,14 @@
 
   function placeShapeOnCanvas(type, clientX, clientY) {
     var rect = canvas.getBoundingClientRect();
+    var cw = canvas.clientWidth || Math.max(0, Math.round(rect.width));
+    var ch = canvas.clientHeight || Math.max(0, Math.round(rect.height));
+    if (cw < 1 || ch < 1) return;
     var sz = sizes[type];
     var left = clientX - rect.left - sz.w / 2;
     var top = clientY - rect.top - sz.h / 2;
-    left = clamp(left, 0, canvas.clientWidth - sz.w);
-    top = clamp(top, 0, canvas.clientHeight - sz.h);
+    left = clamp(left, 0, cw - sz.w);
+    top = clamp(top, 0, ch - sz.h);
     var wrap = document.createElement('div');
     wrap.className = 'pattern-on-canvas';
     wrap.dataset.shape = type;
@@ -494,7 +536,7 @@
     var inner = document.createElement('div');
     inner.className = shapeInnerClass(type);
     wrap.appendChild(inner);
-    if (!isImageShape(type)) applyColorToShape(wrap, placementColor);
+    applyColorToShape(wrap, placementColor);
     setRotationDeg(wrap, 0);
     canvas.appendChild(wrap);
     bringToFront(wrap);
@@ -533,12 +575,21 @@
     el.style.zIndex = String(max + 1);
   }
 
-  function bindPaletteTool(tool) {
-    tool.addEventListener('pointerdown', function (e) {
+  function bindPaletteDrag() {
+    var palette = document.querySelector('.pattern-palette');
+    if (!palette) return;
+    palette.addEventListener('pointerdown', function (e) {
+      var tool = e.target.closest('.pattern-tool[data-shape]');
+      if (!tool || !palette.contains(tool)) return;
       if (e.button !== 0) return;
       e.preventDefault();
       var type = tool.getAttribute('data-shape');
       if (!type || !sizes[type]) return;
+      var pid = e.pointerId;
+      try {
+        tool.setPointerCapture(pid);
+      } catch (err) {}
+
       var ghost = createGhost(type);
       document.body.appendChild(ghost);
       var sz = sizes[type];
@@ -551,21 +602,28 @@
       positionGhost(e);
 
       function move(ev) {
+        if (ev.pointerId !== pid) return;
         positionGhost(ev);
       }
 
       function up(ev) {
+        if (ev.pointerId !== pid) return;
         document.removeEventListener('pointermove', move);
         document.removeEventListener('pointerup', up);
         document.removeEventListener('pointercancel', up);
+        try {
+          tool.releasePointerCapture(pid);
+        } catch (err2) {}
         var r = canvas.getBoundingClientRect();
+        var cx = ev.clientX;
+        var cy = ev.clientY;
         if (
-          ev.clientX >= r.left &&
-          ev.clientX <= r.right &&
-          ev.clientY >= r.top &&
-          ev.clientY <= r.bottom
+          cx >= r.left &&
+          cx <= r.right &&
+          cy >= r.top &&
+          cy <= r.bottom
         ) {
-          placeShapeOnCanvas(type, ev.clientX, ev.clientY);
+          placeShapeOnCanvas(type, cx, cy);
         }
         ghost.remove();
       }
@@ -734,7 +792,7 @@
     bindDelete();
     bindCanvasResize();
     bindCanvasInteractions();
-    document.querySelectorAll('.pattern-tool[data-shape]').forEach(bindPaletteTool);
+    bindPaletteDrag();
     var saveBtn = document.getElementById('pattern-save-btn');
     if (saveBtn) {
       saveBtn.addEventListener('click', savePattern);

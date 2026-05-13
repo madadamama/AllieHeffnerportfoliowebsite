@@ -21,7 +21,8 @@
 :root {
     --bg: #fafafa;
     --text: #000;
-    --dotted-color: #000000;
+    --highlight: #5c6fd0;
+    --dotted-color: var(--highlight);
     --spacing: 2rem;
     --dash-length: 4px;
     --dash-spacing: 16px;
@@ -142,6 +143,151 @@ body {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 1.5rem;
+}
+
+/* ===== AUDIO TICKER (flush bottom of left / bio column) ===== */
+.audio-dock {
+    position: fixed;
+    bottom: env(safe-area-inset-bottom, 0px);
+    left: 0;
+    z-index: 200;
+    width: 100%;
+    max-width: 100vw;
+}
+
+@media (min-width: 769px) {
+    .audio-dock {
+        left: 0;
+        width: var(--sidebar-width);
+        max-width: var(--sidebar-width);
+    }
+}
+
+.audio-dock audio {
+    display: none;
+}
+
+.audio-ticker-btn {
+    display: block;
+    width: 100%;
+    margin: 0;
+    padding: 0.5rem 0;
+    border: none;
+    border-bottom: 1px solid var(--highlight);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1;
+    color: #fff;
+    background: var(--highlight);
+    text-align: left;
+    transition: background 0.2s ease, filter 0.2s ease;
+}
+
+.audio-ticker-btn:hover {
+    background: var(--highlight);
+    filter: brightness(0.92);
+}
+
+.audio-dock.is-playing .audio-ticker-btn {
+    background: var(--highlight);
+    filter: brightness(0.88);
+}
+
+.audio-ticker-btn:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px var(--highlight);
+}
+
+.audio-ticker-viewport {
+    display: block;
+    overflow: hidden;
+    width: 100%;
+}
+
+.audio-ticker-track {
+    display: flex;
+    width: max-content;
+    animation: audio-marquee 22s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .audio-ticker-track {
+        animation: none;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .audio-ticker-group:last-child {
+        display: none;
+    }
+}
+
+@keyframes audio-marquee {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+.audio-ticker-group {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    flex-wrap: nowrap;
+    gap: 1rem;
+    padding-right: 1.75rem;
+}
+
+.audio-unit {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    white-space: nowrap;
+}
+
+.audio-unit-icons {
+    display: inline-grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 1.1em;
+    height: 1.1em;
+    color: #fff;
+}
+
+.audio-icon-svg {
+    grid-area: 1 / 1;
+    display: block;
+    width: 1em;
+    height: 1em;
+}
+
+.audio-icon-pause {
+    display: none;
+}
+
+.audio-dock.is-playing .audio-icon-play {
+    display: none;
+}
+
+.audio-dock.is-playing .audio-icon-pause {
+    display: block;
+}
+
+.audio-marquee-text {
+    color: inherit;
+    line-height: 1;
+}
+
+.audio-marquee-updated {
+    opacity: 0.88;
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
 }
 
 /* PROJECT LINK STYLES */
