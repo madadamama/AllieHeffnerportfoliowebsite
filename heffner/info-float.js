@@ -1,4 +1,48 @@
 (function () {
+  function clamp(n, min, max) {
+    return Math.max(min, Math.min(max, n));
+  }
+
+  function bindPanelDrag(panel) {
+    var handle = panel.querySelector('h1');
+    if (!handle) return;
+
+    handle.addEventListener('pointerdown', function (e) {
+      if (e.button !== 0) return;
+      e.preventDefault();
+
+      var margin = 12;
+      var rect = panel.getBoundingClientRect();
+      var offsetX = e.clientX - rect.left;
+      var offsetY = e.clientY - rect.top;
+      var transform = panel.style.transform || '';
+
+      panel.style.zIndex = '11';
+      handle.style.cursor = 'grabbing';
+
+      function move(ev) {
+        var w = panel.offsetWidth;
+        var h = panel.offsetHeight;
+        var left = clamp(ev.clientX - offsetX, margin, window.innerWidth - w - margin);
+        var top = clamp(ev.clientY - offsetY, margin, window.innerHeight - h - margin);
+        panel.style.left = left + 'px';
+        panel.style.top = top + 'px';
+        if (transform) panel.style.transform = transform;
+      }
+
+      function up() {
+        handle.style.cursor = '';
+        document.removeEventListener('pointermove', move);
+        document.removeEventListener('pointerup', up);
+        document.removeEventListener('pointercancel', up);
+      }
+
+      document.addEventListener('pointermove', move);
+      document.addEventListener('pointerup', up);
+      document.addEventListener('pointercancel', up);
+    });
+  }
+
   function placePop(el) {
     if (!el) return;
     var margin = 12;
@@ -50,6 +94,10 @@
         var panel = btn.closest('.info-floating-pop');
         if (panel) hidePanel(panel);
       });
+    });
+
+    panels.forEach(function (panel) {
+      bindPanelDrag(panel);
     });
   }
 
