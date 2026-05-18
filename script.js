@@ -1,27 +1,108 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const audioDock = document.getElementById('audio-dock');
-    const siteAudio = document.getElementById('site-audio');
-    const audioTickerBtn = document.getElementById('audio-ticker-btn');
-    if (audioDock && siteAudio && audioTickerBtn) {
-        const labelPlay = 'Play NEW MUSIC VOICEMAIL';
-        const labelPause = 'Pause NEW MUSIC VOICEMAIL';
-        function syncAudioUi() {
-            const on = !siteAudio.paused;
-            audioDock.classList.toggle('is-playing', on);
-            audioTickerBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
-            audioTickerBtn.setAttribute('aria-label', on ? labelPause : labelPlay);
-        }
-        audioTickerBtn.addEventListener('click', function() {
-            if (siteAudio.paused) {
-                siteAudio.play().catch(function() { syncAudioUi(); });
+    (function initVariableName() {
+        var nameEl = document.querySelector('.info-name');
+        if (!nameEl) return;
+
+        var text = nameEl.textContent.trim();
+        var maxTilt = 12; /* degrees */
+
+        nameEl.textContent = '';
+        nameEl.setAttribute('aria-label', text);
+
+        for (var i = 0; i < text.length; i++) {
+            var ch = text.charAt(i);
+            var span = document.createElement('span');
+            span.className = 'info-name-letter';
+            span.setAttribute('aria-hidden', 'true');
+
+            if (ch === ' ') {
+                span.classList.add('info-name-space');
+                span.textContent = '\u00a0';
             } else {
-                siteAudio.pause();
+                span.textContent = ch;
+                if (ch === 'A' || ch === 'H') {
+                    var tilt = (Math.random() * 2 - 1) * maxTilt;
+                    span.style.transform = 'rotate(' + tilt.toFixed(2) + 'deg)';
+                }
+            }
+
+            nameEl.appendChild(span);
+        }
+    })();
+
+    (function initNewMusicVoicemail() {
+        var trigger = document.querySelector('.info-music-hover');
+        var drawer = document.getElementById('info-drawer');
+        if (!trigger || !drawer) return;
+
+        var desktopMq = window.matchMedia('(min-width: 769px)');
+        var voicemailSrc = 'Voicemail May 2.m4a';
+        var hideTimer = null;
+
+        var dock = document.createElement('div');
+        dock.className = 'sidebar-voicemail-dock';
+        dock.id = 'sidebar-voicemail-dock';
+        dock.setAttribute('aria-hidden', 'true');
+        dock.innerHTML =
+            '<p class="sidebar-voicemail-label">Spoiled By Your Love by Anita Ward</p>' +
+            '<div class="sidebar-voicemail-progress" aria-hidden="true"></div>' +
+            '<audio id="sidebar-voicemail-player" preload="metadata"></audio>';
+
+        drawer.appendChild(dock);
+
+        var player = dock.querySelector('#sidebar-voicemail-player');
+        var audioUrl = new URL(voicemailSrc, window.location.href).href;
+
+        function showDock() {
+            if (!desktopMq.matches) return;
+            clearTimeout(hideTimer);
+            dock.classList.add('is-visible');
+            dock.setAttribute('aria-hidden', 'false');
+        }
+
+        function hideDock() {
+            hideTimer = setTimeout(function() {
+                dock.classList.remove('is-visible', 'is-playing');
+                trigger.classList.remove('is-active');
+                dock.setAttribute('aria-hidden', 'true');
+                player.pause();
+                player.currentTime = 0;
+            }, 180);
+        }
+
+        function startPlayback() {
+            if (!desktopMq.matches) return;
+            trigger.classList.add('is-active');
+            showDock();
+            if (player.src !== audioUrl) {
+                player.src = audioUrl;
+            }
+            dock.classList.add('is-playing');
+            player.play().catch(function() {
+                dock.classList.remove('is-playing');
+            });
+        }
+
+        trigger.addEventListener('mouseenter', startPlayback);
+        trigger.addEventListener('mouseleave', hideDock);
+        trigger.addEventListener('focus', startPlayback);
+        trigger.addEventListener('blur', hideDock);
+
+        dock.addEventListener('mouseenter', function() {
+            clearTimeout(hideTimer);
+        });
+        dock.addEventListener('mouseleave', hideDock);
+
+        player.addEventListener('ended', function() {
+            dock.classList.remove('is-playing');
+        });
+
+        player.addEventListener('pause', function() {
+            if (player.currentTime === 0 || player.ended) {
+                dock.classList.remove('is-playing');
             }
         });
-        siteAudio.addEventListener('play', syncAudioUi);
-        siteAudio.addEventListener('pause', syncAudioUi);
-        syncAudioUi();
-    }
+    })();
 
     // Your existing thumbnail code stays exactly the same
     document.querySelectorAll('.project-thumb').forEach(thumb => {
