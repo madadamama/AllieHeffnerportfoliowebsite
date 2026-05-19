@@ -3,20 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dad's Stripes</title>
+    <title>Dad's Tie</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://use.typekit.net/nww2lmi.css">
 </head>
-<body class="pop-page">
+<body class="pop-page pop-page--photo-reveal">
     <main class="page pop-page-wrap">
         <header class="topbar">
             <a href="index.html">Heffner Family Archive</a>
             <a href="info.html">Info</a>
         </header>
 
-        <section class="pop-layout">
+        <section class="pop-layout" id="polkadottie-layout">
             <section class="pop-pattern">
-                <img src="dots.png" alt="Dad's Stripes pattern">
+                <img src="dots.png" alt="Dad's Tie pattern">
             </section>
 
             <section class="pop-story">
@@ -26,13 +26,25 @@
                 <h2><a href="005.html" style="text-decoration-line: underline;">2026.005.03</a></h2>
                 </div>
 
+                <button type="button" class="pop-photo-toggle" aria-expanded="false" aria-controls="polkadottie-photo">
+                  <span class="pop-photo-toggle-icon" aria-hidden="true">⌃</span>
+                  <span class="visually-hidden">Show photo</span>
+                </button>
+
+                <figure id="polkadottie-photo" class="pop-photo-reveal" hidden>
+                  <img src="dadstie.jpeg" alt="Dad's tie">
+                </figure>
+
+                <div class="pop-copy-body">
                 <p>
                     I believe a tie can subtly reveal a person's personality. My Dad was silly, charming, and knew how to have a good time. 
                 </p>
+                </div>
                 </article>
             </section>
         </section>
     </main>
     <script src="pop-copy-tilt.js"></script>
+    <script src="pop-photo-toggle.js"></script>
 </body>
 </html>

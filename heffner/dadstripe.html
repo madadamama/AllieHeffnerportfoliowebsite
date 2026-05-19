@@ -7,15 +7,15 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://use.typekit.net/nww2lmi.css">
 </head>
-<body class="pop-page">
+<body class="pop-page pop-page--photo-reveal">
     <main class="page pop-page-wrap">
         <header class="topbar">
             <a href="index.html">Heffner Family Archive</a>
             <a href="info.html">Info</a>
         </header>
 
-        <section class="pop-layout">
-            <section class="pop-pattern">
+        <section class="pop-layout" id="dadstripe-layout">
+            <section class="pop-pattern pop-pattern--stripes">
                 <img src="dadstripes.png" alt="Dad's Stripes pattern">
             </section>
 
@@ -26,13 +26,25 @@
                 <h2><a href="005.html" style="text-decoration-line: underline;">2026.005.01</a></h2>
                 </div>
 
+                <button type="button" class="pop-photo-toggle" aria-expanded="false" aria-controls="dadstripe-photo">
+                  <span class="pop-photo-toggle-icon" aria-hidden="true">⌃</span>
+                  <span class="visually-hidden">Show photo</span>
+                </button>
+
+                <figure id="dadstripe-photo" class="pop-photo-reveal" hidden>
+                  <img src="dadsstripe.jpeg" alt="Dad wearing stripes">
+                </figure>
+
+                <div class="pop-copy-body">
                 <p>
                    I can tell that my Dad was an avid stripe lover. He showed his personality through the clothes he wore — one of the few things I wished I had inherited was his closet. It seemed as though he had at least 30 articles of clothing with stripes on them. 
                 </p>
+                </div>
                 </article>
             </section>
         </section>
     </main>
     <script src="pop-copy-tilt.js"></script>
+    <script src="pop-photo-toggle.js"></script>
 </body>
 </html>

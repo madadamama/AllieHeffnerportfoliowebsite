@@ -3,20 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dad's Stripes</title>
+    <title>Auntie Maria's Vest</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://use.typekit.net/nww2lmi.css">
 </head>
-<body class="pop-page">
+<body class="pop-page pop-page--photo-reveal">
     <main class="page pop-page-wrap">
         <header class="topbar">
             <a href="index.html">Heffner Family Archive</a>
             <a href="info.html">Info</a>
         </header>
 
-        <section class="pop-layout">
+        <section class="pop-layout" id="auntiemariasvest-layout">
             <section class="pop-pattern">
-                <img src="auntiemaria.png" alt="Auntie Maria's Vest">
+                <img src="auntiemaria.png" alt="Auntie Maria's Vest pattern">
             </section>
 
             <section class="pop-story">
@@ -26,15 +26,27 @@
                 <h2><a href="006.html" style="text-decoration-line: underline;">2026.006.01</a></h2>
                 </div>
 
+                <button type="button" class="pop-photo-toggle" aria-expanded="false" aria-controls="auntiemariasvest-photo">
+                  <span class="pop-photo-toggle-icon" aria-hidden="true">⌃</span>
+                  <span class="visually-hidden">Show photo</span>
+                </button>
+
+                <figure id="auntiemariasvest-photo" class="pop-photo-reveal" hidden>
+                  <img src="auntiemariavest.jpeg" alt="Auntie Maria's vest">
+                </figure>
+
+                <div class="pop-copy-body">
                 <p>
                     I always knew how special Auntie Maria was to our family. 
                 </p>
                 <p>She was the baby of the family, the only girl among the four, and made sure the three left behind were taken care of.
                 </p>
+                </div>
                 </article>
             </section>
         </section>
     </main>
     <script src="pop-copy-tilt.js"></script>
+    <script src="pop-photo-toggle.js"></script>
 </body>
 </html>

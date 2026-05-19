@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dad's Stripes</title>
+    <title>Clerical Collar</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://use.typekit.net/nww2lmi.css">
 </head>
-<body class="pop-page">
+<body class="pop-page pop-page--photo-reveal">
     <main class="page pop-page-wrap">
         <header class="topbar">
             <a href="index.html">Heffner Family Archive</a>
             <a href="info.html">Info</a>
         </header>
 
-        <section class="pop-layout">
+        <section class="pop-layout" id="clericalcollar-layout">
             <section class="pop-pattern">
                 <img src="pop.png" alt="Clerical Collar pattern">
             </section>
@@ -26,15 +26,27 @@
                 <h2><a href="002.html" style="text-decoration-line: underline;">2026.002.01</a></h2>
                 </div>
 
+                <button type="button" class="pop-photo-toggle" aria-expanded="false" aria-controls="clericalcollar-photo">
+                  <span class="pop-photo-toggle-icon" aria-hidden="true">⌃</span>
+                  <span class="visually-hidden">Show photo</span>
+                </button>
+
+                <figure id="clericalcollar-photo" class="pop-photo-reveal" hidden>
+                  <img src="clericalcollar.png" alt="Clerical collar">
+                </figure>
+
+                <div class="pop-copy-body">
                 <p>
                     I grew up not knowing much about my Grandfather. I knew that he was a pastor,
                     had no intentions of getting married, and ended up with four children.
                     Everything that I knew about him was through word of mouth.
                 </p>
+                </div>
                 </article>
             </section>
         </section>
     </main>
     <script src="pop-copy-tilt.js"></script>
+    <script src="pop-photo-toggle.js"></script>
 </body>
 </html>

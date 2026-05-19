@@ -7,16 +7,16 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://use.typekit.net/nww2lmi.css">
 </head>
-<body class="pop-page">
+<body class="pop-page pop-page--photo-reveal">
     <main class="page pop-page-wrap">
         <header class="topbar">
             <a href="index.html">Heffner Family Archive</a>
             <a href="info.html">Info</a>
         </header>
 
-        <section class="pop-layout">
+        <section class="pop-layout" id="favoritesuit-layout">
             <section class="pop-pattern">
-                <img src="auntiemaria2.png" alt="Auntie Maria's Vest">
+                <img src="auntiemaria2.png" alt="Favorite Suit pattern">
             </section>
 
             <section class="pop-story">
@@ -26,13 +26,25 @@
                 <h2><a href="006.html" style="text-decoration-line: underline;">2026.006.02</a></h2>
                 </div>
 
+                <button type="button" class="pop-photo-toggle" aria-expanded="false" aria-controls="favoritesuit-photo">
+                  <span class="pop-photo-toggle-icon" aria-hidden="true">⌃</span>
+                  <span class="visually-hidden">Show photo</span>
+                </button>
+
+                <figure id="favoritesuit-photo" class="pop-photo-reveal" hidden>
+                  <img src="favoritesuit.jpeg" alt="Favorite suit">
+                </figure>
+
+                <div class="pop-copy-body">
                 <p>
                     “That was my very favorite suit of that time, I wore it until it fell off me”
                 </p>
+                </div>
                 </article>
             </section>
         </section>
     </main>
     <script src="pop-copy-tilt.js"></script>
+    <script src="pop-photo-toggle.js"></script>
 </body>
 </html>

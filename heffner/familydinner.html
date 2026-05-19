@@ -3,20 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dad's Stripes</title>
+    <title>Family Dinner</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://use.typekit.net/nww2lmi.css">
 </head>
-<body class="pop-page">
+<body class="pop-page pop-page--photo-reveal">
     <main class="page pop-page-wrap">
         <header class="topbar">
             <a href="index.html">Heffner Family Archive</a>
             <a href="info.html">Info</a>
         </header>
 
-        <section class="pop-layout">
+        <section class="pop-layout" id="familydinner-layout">
             <section class="pop-pattern">
-                <img src="stripes.png" alt="Dad's Stripes pattern">
+                <img src="stripes.png" alt="Family Dinner pattern">
             </section>
 
             <section class="pop-story">
@@ -26,6 +26,16 @@
                 <h2><a href="005.html" style="text-decoration-line: underline;">2026.005.02</a></h2>
                 </div>
 
+                <button type="button" class="pop-photo-toggle" aria-expanded="false" aria-controls="familydinner-photo">
+                  <span class="pop-photo-toggle-icon" aria-hidden="true">⌃</span>
+                  <span class="visually-hidden">Show photo</span>
+                </button>
+
+                <figure id="familydinner-photo" class="pop-photo-reveal" hidden>
+                  <img src="familydinner.jpeg" alt="Family dinner">
+                </figure>
+
+                <div class="pop-copy-body">
                 <p>
                     Sometimes I wished that we had grown up in the U.S, not in Hong Kong. We would’ve been closer to the Heffner side of the family, maybe had more of a reason to celebrate “American” traditions like Thanksgiving and Halloween.
 
@@ -34,10 +44,12 @@
                 <p>
                     Maybe the importance of family dinners would be emphasized. 
                 </p>
+                </div>
                 </article>
             </section>
         </section>
     </main>
     <script src="pop-copy-tilt.js"></script>
+    <script src="pop-photo-toggle.js"></script>
 </body>
 </html>

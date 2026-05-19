@@ -3,20 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dad's Stripes</title>
+    <title>Tie Four Ways</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://use.typekit.net/nww2lmi.css">
 </head>
-<body class="pop-page">
+<body class="pop-page pop-page--photo-reveal">
     <main class="page pop-page-wrap">
         <header class="topbar">
             <a href="index.html">Heffner Family Archive</a>
             <a href="info.html">Info</a>
         </header>
 
-        <section class="pop-layout">
+        <section class="pop-layout" id="tiefourways-layout">
             <section class="pop-pattern">
-                <img src="dadtie.png" alt="Dad's Stripes pattern">
+                <img src="dadtie.png" alt="Tie Four Ways pattern">
             </section>
 
             <section class="pop-story">
@@ -26,6 +26,16 @@
                 <h2><a href="005.html" style="text-decoration-line: underline;">2026.005.04</a></h2>
                 </div>
 
+                <button type="button" class="pop-photo-toggle" aria-expanded="false" aria-controls="tiefourways-photo">
+                  <span class="pop-photo-toggle-icon" aria-hidden="true">⌃</span>
+                  <span class="visually-hidden">Show photo</span>
+                </button>
+
+                <figure id="tiefourways-photo" class="pop-photo-reveal" hidden>
+                  <img src="tiefourways.jpeg" alt="Tie four ways">
+                </figure>
+
+                <div class="pop-copy-body">
                 <p>
                     The most unconventional storyteller was my Dad. He would tell us about his time in high school, college, and the in-between. He never made it seem like a chore to sit down and tell my sister and me bedtime stories — maybe because he could reminisce while telling them.
                 </p>
@@ -37,10 +47,12 @@
                 <p>
                     But he was good at telling stories. You felt like you were there in the room, taking in every piece of his life.
                 </p>
+                </div>
                 </article>
             </section>
         </section>
     </main>
     <script src="pop-copy-tilt.js"></script>
+    <script src="pop-photo-toggle.js"></script>
 </body>
 </html>

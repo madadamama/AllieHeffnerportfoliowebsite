@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dad's Stripes</title>
+    <title>Nana's Kimono</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://use.typekit.net/nww2lmi.css">
 </head>
-<body class="pop-page">
+<body class="pop-page pop-page--photo-reveal">
     <main class="page pop-page-wrap">
         <header class="topbar">
             <a href="index.html">Heffner Family Archive</a>
             <a href="info.html">Info</a>
         </header>
 
-        <section class="pop-layout">
+        <section class="pop-layout" id="nana-layout">
             <section class="pop-pattern">
                 <img src="nana.png" alt="Nana's Kimono">
             </section>
@@ -26,6 +26,16 @@
                 <h2><a href="001.html" style="text-decoration-line: underline;">2026.001.01</a></h2>
                 </div>
 
+                <button type="button" class="pop-photo-toggle" aria-expanded="false" aria-controls="nana-photo">
+                  <span class="pop-photo-toggle-icon" aria-hidden="true">⌃</span>
+                  <span class="visually-hidden">Show photo</span>
+                </button>
+
+                <figure id="nana-photo" class="pop-photo-reveal" hidden>
+                  <img src="nanaskimono.jpeg" alt="Nana's kimono">
+                </figure>
+
+                <div class="pop-copy-body">
                 <p>
                     There are very few memories and moments that I remember with Nana. But the one I remember most clearly was when we visited her in Mount Kisco, sat in her living room, eating frozen blueberries.
                 </p>
@@ -37,11 +47,13 @@
                 <p>
                     I love frozen blueberries and I sometimes miss my Nana. 
                 </p>
+                </div>
 
                 </article>
             </section>
         </section>
     </main>
     <script src="pop-copy-tilt.js"></script>
+    <script src="pop-photo-toggle.js"></script>
 </body>
 </html>

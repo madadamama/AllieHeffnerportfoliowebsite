@@ -26,15 +26,15 @@
 }
 
 :root {
-    --bg: #ffffff;
+    --bg: #fffffe;
     --text: #000000;
-    --highlight: #5c6fd0;
+    --highlight: #ff51bc;
     --dotted-color: var(--highlight);
     --spacing: 2rem;
     --dash-length: 4px;
     --dash-spacing: 16px;
     --sidebar-width: 360px;
-    --bio-column-bg: #ffffff;
+    --bio-column-bg: #fffffe;
 }
 
 html {
