@@ -399,6 +399,59 @@
       margin: 0 auto 1rem;
     }
 
+    .pop-page--cjk .pop-layout,
+    .pop-page--cjk .pop-copy,
+    .pop-page--cjk .pop-copy p {
+      font-family: clarendon-text-pro, "Noto Serif TC", "PingFang TC", "Heiti TC", "Microsoft JhengHei", "STSong", serif;
+    }
+
+    .pop-page--cjk .pop-copy p {
+      line-height: 1.55;
+    }
+
+    .pop-page--cjk .pop-cjk-quote {
+      position: relative;
+      cursor: help;
+      border-bottom: 1px dotted #000;
+    }
+
+    .pop-page--cjk .pop-cjk-quote-translation {
+      position: absolute;
+      left: 50%;
+      bottom: calc(100% + 0.4rem);
+      transform: translateX(-50%);
+      width: max-content;
+      max-width: min(18rem, 85vw);
+      padding: 0.5rem 0.65rem;
+      background: #ffeb3b;
+      border: 1px solid #000;
+      font-family: clarendon-text-pro, "Times New Roman", Times, serif;
+      font-size: 0.85rem;
+      font-weight: 400;
+      line-height: 1.35;
+      text-align: center;
+      color: #000;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.15s ease, visibility 0.15s ease;
+      z-index: 2;
+    }
+
+    .pop-page--cjk .pop-cjk-quote:hover .pop-cjk-quote-translation,
+    .pop-page--cjk .pop-cjk-quote:focus-within .pop-cjk-quote-translation {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .pop-page--cjk .pop-cjk-quote-source {
+      display: block;
+      margin-top: 0.35rem;
+      font-weight: 300;
+      font-size: 0.78rem;
+      color: rgba(0, 0, 0, 0.55);
+    }
+
     @media (max-width: 980px) {
       .pop-layout {
         grid-template-columns: 1fr;

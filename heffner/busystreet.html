@@ -7,14 +7,14 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://use.typekit.net/nww2lmi.css">
 </head>
-<body class="pop-page">
+<body class="pop-page pop-page--photo-reveal">
     <main class="page pop-page-wrap">
         <header class="topbar">
             <a href="index.html">Heffner Family Archive</a>
             <a href="info.html">Info</a>
         </header>
 
-        <section class="pop-layout">
+        <section class="pop-layout" id="busystreet-layout">
             <section class="pop-pattern">
                 <img src="street.png" alt="Auntie Maria's Vest">
             </section>
@@ -26,15 +26,27 @@
                 <h2><a href="006.html" style="text-decoration-line: underline;">2026.006.03</a></h2>
                 </div>
 
+                <button type="button" class="pop-photo-toggle" aria-expanded="false" aria-controls="busystreet-photo">
+                  <span class="pop-photo-toggle-icon" aria-hidden="true">⌃</span>
+                  <span class="visually-hidden">Show photo</span>
+                </button>
+
+                <figure id="busystreet-photo" class="pop-photo-reveal" hidden>
+                  <img src="tiefourways.jpeg" alt="Tie four ways">
+                </figure>
+
+                <div class="pop-copy-body">
                 <p>
                     My first trip to Seattle was roughly a year after my Dad had passed. My sister and I were welcomed with open arms to celebrate the holidays with Auntie Maria and her family — a somewhat full reunion, with the majority of the Heffners there.
                 </p>
                 <p>We played mahjong, looked through old family photos, celebrated Christmas together, and talked candidly about how hard it was to grieve.
                 </p>
+                </div>
                 </article>
             </section>
         </section>
     </main>
     <script src="pop-copy-tilt.js"></script>
+    <script src="pop-photo-toggle.js"></script>
 </body>
 </html>
