@@ -188,6 +188,7 @@ body {
     padding: 0.75rem var(--spacing) 1rem;
     background: var(--bio-column-bg);
     border-top: 1px dotted var(--highlight);
+    border-right: 1px solid rgba(0, 0, 0, 0.2);
     transform: translateY(100%);
     opacity: 0;
     visibility: hidden;
@@ -1357,6 +1358,7 @@ video.project-main-media {
 .page-project .project-title {
     font-family: var(--font-bio);
     font-weight: 900;
+    color: #000;
 }
 
 .page-project .project-year {
@@ -1410,6 +1412,7 @@ video.project-main-media {
     width: 480px;
     max-width: none;
     background: var(--bio-column-bg);
+    border-right: 1px solid rgba(0, 0, 0, 0.2);
 }
 
 @media (max-width: 768px) {
