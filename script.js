@@ -1,4 +1,67 @@
 document.addEventListener('DOMContentLoaded', function() {
+    (function initProjectCarousels() {
+        function advanceCarousel(carousel, nextIndex) {
+            var slides = carousel.querySelectorAll('.project-carousel-slide');
+            if (!slides.length) return 0;
+            var current = 0;
+            for (var i = 0; i < slides.length; i++) {
+                if (slides[i].classList.contains('is-active')) {
+                    current = i;
+                    break;
+                }
+            }
+            var index = typeof nextIndex === 'number'
+                ? ((nextIndex % slides.length) + slides.length) % slides.length
+                : (current + 1) % slides.length;
+            slides[current].classList.remove('is-active');
+            slides[index].classList.add('is-active');
+            return index;
+        }
+
+        document.querySelectorAll('[data-synced-carousels]').forEach(function(group) {
+            var carousels = group.querySelectorAll('.project-carousel');
+            if (carousels.length < 2) return;
+            var intervalMs = parseInt(group.getAttribute('data-interval'), 10) || 5000;
+            setInterval(function() {
+                var nextIndex = null;
+                carousels.forEach(function(carousel, i) {
+                    if (i === 0) {
+                        nextIndex = advanceCarousel(carousel);
+                    } else {
+                        advanceCarousel(carousel, nextIndex);
+                    }
+                });
+            }, intervalMs);
+        });
+
+        document.querySelectorAll('.project-carousel').forEach(function(carousel) {
+            if (carousel.closest('[data-synced-carousels]')) return;
+            var slides = carousel.querySelectorAll('.project-carousel-slide');
+            if (slides.length < 2) return;
+            var intervalMs = parseInt(carousel.getAttribute('data-interval'), 10) || 5000;
+            setInterval(function() {
+                advanceCarousel(carousel);
+            }, intervalMs);
+        });
+    })();
+
+    (function initProjectsPanel() {
+        var panel = document.getElementById('projects-panel');
+        var closeBtn = document.getElementById('projects-panel-close');
+        var reopenBtn = document.getElementById('projects-panel-reopen');
+        if (!panel || !closeBtn || !reopenBtn) return;
+
+        closeBtn.addEventListener('click', function() {
+            panel.classList.add('is-closed');
+            reopenBtn.hidden = false;
+        });
+
+        reopenBtn.addEventListener('click', function() {
+            panel.classList.remove('is-closed');
+            reopenBtn.hidden = true;
+        });
+    })();
+
     (function initVariableName() {
         var nameEl = document.querySelector('.info-name');
         if (!nameEl) return;
@@ -32,11 +95,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     (function initNewMusicVoicemail() {
         var trigger = document.querySelector('.info-music-hover');
-        var drawer = document.getElementById('info-drawer');
-        if (!trigger || !drawer) return;
+        var host = document.getElementById('info-drawer')
+            || document.getElementById('site-header')
+            || document.body;
+        if (!trigger || !host) return;
 
         var desktopMq = window.matchMedia('(min-width: 769px)');
-        var voicemailSrc = 'Voicemail May 2.m4a';
+        var voicemailSrc = 'Unknown Delight - Voicemail 2.m4a';
         var hideTimer = null;
 
         var dock = document.createElement('div');
@@ -44,11 +109,11 @@ document.addEventListener('DOMContentLoaded', function() {
         dock.id = 'sidebar-voicemail-dock';
         dock.setAttribute('aria-hidden', 'true');
         dock.innerHTML =
-            '<p class="sidebar-voicemail-label">Spoiled By Your Love by Anita Ward</p>' +
+            '<p class="sidebar-voicemail-label">Unknown Delight by George Harrison</p>' +
             '<div class="sidebar-voicemail-progress" aria-hidden="true"></div>' +
             '<audio id="sidebar-voicemail-player" preload="metadata"></audio>';
 
-        drawer.appendChild(dock);
+        host.appendChild(dock);
 
         var player = dock.querySelector('#sidebar-voicemail-player');
         var audioUrl = new URL(voicemailSrc, window.location.href).href;
