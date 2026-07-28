@@ -978,10 +978,12 @@ video.project-main-media {
 .page-bsr .bsr-schedule-carousel .project-carousel-track {
     /* Match bsr_promo3.png so left/right columns align */
     aspect-ratio: 4679 / 5924;
+    width: 100%;
 }
 
 .page-bsr .bsr-schedule-carousel .project-carousel-slide {
-    object-fit: contain;
+    object-fit: cover;
+    object-position: center top;
 }
 
 .cs-text {
