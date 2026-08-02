@@ -998,6 +998,22 @@ video.project-main-media {
     margin-top: 0;
 }
 
+.page-sd .cs-full + .cs-full {
+    margin-top: 1rem;
+}
+
+.page-sd .cs-full img {
+    margin-top: 0;
+}
+
+.page-sd .project-media {
+    margin-bottom: 1rem;
+}
+
+.page-sd .cs-row {
+    margin-bottom: 1rem;
+}
+
 .cs-text {
     font-size: 16px;
     line-height: 1.7;
