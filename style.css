@@ -1014,6 +1014,26 @@ video.project-main-media {
     margin-bottom: 1rem;
 }
 
+.page-archive .project-media {
+    margin-bottom: 1rem;
+}
+
+.page-archive .project-content > .cs-full {
+    margin-bottom: 1rem;
+}
+
+.page-archive .project-content > .cs-full img {
+    margin-top: 0;
+}
+
+.page-archive .project-content > .cs-row {
+    margin-bottom: 1rem;
+}
+
+.page-archive .project-content > .cs-layout {
+    margin-top: 0;
+}
+
 .cs-text {
     font-size: 16px;
     line-height: 1.7;
