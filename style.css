@@ -150,7 +150,7 @@ body {
 
 .info-link:hover {
     text-decoration: underline;
-    text-decoration-color: #5c6fd0;
+    text-decoration-color: var(--highlight);
     text-decoration-thickness: 2px;
     text-underline-offset: 3px;
     background-color: transparent;
@@ -175,6 +175,38 @@ body {
 .info-music-hover:hover,
 .info-music-hover.is-active {
     animation: dotted-line-scroll-underline 1.4s linear infinite;
+}
+
+.info-patterns-hover {
+    position: relative;
+    cursor: pointer;
+    display: inline;
+    border-bottom: 1px dotted var(--highlight);
+    padding-bottom: 0.1em;
+}
+
+.info-patterns-preview {
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 0.4rem);
+    transform: translateX(-50%);
+    width: 1in;
+    height: 1in;
+    object-fit: cover;
+    display: block;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    z-index: 80;
+    border: 1.5px solid #ffff71;
+    background: #fff;
+    transition: opacity 0.15s ease, visibility 0.15s ease;
+}
+
+.info-patterns-hover:hover .info-patterns-preview,
+.info-patterns-hover:focus-within .info-patterns-preview {
+    opacity: 1;
+    visibility: visible;
 }
 
 /* Sidebar voicemail dock (hover on "new music") */
