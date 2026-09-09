@@ -220,7 +220,7 @@ body {
     padding: 0.75rem var(--spacing) 1rem;
     background: var(--bio-column-bg);
     border-top: 1px dotted var(--highlight);
-    border-right: 1px solid rgba(0, 0, 0, 0.2);
+    border-right: none;
     transform: translateY(100%);
     opacity: 0;
     visibility: hidden;
@@ -1156,7 +1156,7 @@ video.project-main-media {
     flex-direction: column;
     gap: 0.5rem;
     overflow-y: auto;
-    border-right: 1px solid rgba(0, 0, 0, 0.2);
+    border-right: none;
 }
 
 .page-index .info-name,
@@ -1494,7 +1494,7 @@ video.project-main-media {
     width: 480px;
     max-width: none;
     background: var(--bio-column-bg);
-    border-right: 1px solid rgba(0, 0, 0, 0.2);
+    border-right: none;
 }
 
 @media (max-width: 768px) {
