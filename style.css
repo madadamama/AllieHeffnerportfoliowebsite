@@ -156,27 +156,6 @@ body {
     background-color: transparent;
 }
 
-.info-music-hover {
-    cursor: pointer;
-    text-decoration: none;
-    background-image: repeating-linear-gradient(
-        to right,
-        var(--highlight) 0,
-        var(--highlight) 3px,
-        transparent 3px,
-        transparent 8px
-    );
-    background-size: 16px 2px;
-    background-repeat: repeat-x;
-    background-position: 0 calc(100% - 1px);
-    padding-bottom: 0.2em;
-}
-
-.info-music-hover:hover,
-.info-music-hover.is-active {
-    animation: dotted-line-scroll-underline 1.4s linear infinite;
-}
-
 .info-patterns-hover {
     position: relative;
     cursor: pointer;
@@ -207,74 +186,6 @@ body {
 .info-patterns-hover:focus-within .info-patterns-preview {
     opacity: 1;
     visibility: visible;
-}
-
-/* Sidebar voicemail dock (hover on "new music") */
-.sidebar-voicemail-dock {
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    z-index: 300;
-    width: var(--sidebar-width);
-    box-sizing: border-box;
-    padding: 0.75rem var(--spacing) 1rem;
-    background: var(--bio-column-bg);
-    border-top: 1px dotted var(--highlight);
-    border-right: none;
-    transform: translateY(100%);
-    opacity: 0;
-    visibility: hidden;
-    transition: transform 0.28s ease, opacity 0.28s ease, visibility 0.28s ease;
-    pointer-events: none;
-}
-
-.sidebar-voicemail-dock.is-visible {
-    transform: translateY(0);
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-}
-
-.sidebar-voicemail-dock.is-visible:hover {
-    pointer-events: auto;
-}
-
-.sidebar-voicemail-label {
-    font-size: 13px;
-    font-weight: var(--font-weight-light);
-    line-height: 1.35;
-    color: var(--text);
-    margin: 0 0 0.5rem;
-}
-
-.sidebar-voicemail-progress {
-    height: 4px;
-    width: 100%;
-    background-image: repeating-linear-gradient(
-        to right,
-        var(--highlight) 0,
-        var(--highlight) 3px,
-        transparent 3px,
-        transparent 8px
-    );
-    background-size: 16px 4px;
-    background-repeat: repeat-x;
-    opacity: 0.45;
-}
-
-.sidebar-voicemail-dock.is-visible .sidebar-voicemail-progress {
-    opacity: 1;
-    animation: dotted-line-scroll-bar 1.8s linear infinite;
-}
-
-@keyframes dotted-line-scroll-underline {
-    from { background-position: 0 calc(100% - 1px); }
-    to { background-position: 16px calc(100% - 1px); }
-}
-
-@keyframes dotted-line-scroll-bar {
-    from { background-position: 0 0; }
-    to { background-position: 16px 0; }
 }
 
 /* ===== BIO DRAWER (desktop sidebar) ===== */
@@ -1488,15 +1399,6 @@ video.project-main-media {
     color: #ffff71;
 }
 
-.page-index .sidebar-voicemail-dock,
-.page-project .sidebar-voicemail-dock {
-    left: 0;
-    width: 480px;
-    max-width: none;
-    background: var(--bio-column-bg);
-    border-right: none;
-}
-
 @media (max-width: 768px) {
     .page-index .index-shell,
     .page-project .index-shell {
@@ -1525,9 +1427,7 @@ video.project-main-media {
     .page-index .site-letterhead,
     .page-project .site-letterhead,
     .page-index .sidebar-footer,
-    .page-project .sidebar-footer,
-    .page-index .sidebar-voicemail-dock,
-    .page-project .sidebar-voicemail-dock {
+    .page-project .sidebar-footer {
         display: none;
     }
 
